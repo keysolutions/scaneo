@@ -7,7 +7,11 @@ package {{.PackageName}}
 
 import "database/sql"
 
-{{range .Tokens}}func {{$.Visibility}}can{{title .Name}}(r *sql.Row) ({{.Name}}, error) {
+type Scanner interface {
+	Scan(dest ...interface{}) error
+}
+
+{{range .Tokens}}func {{$.Visibility}}can{{title .Name}}(r Scanner) ({{.Name}}, error) {
 	var s {{.Name}}
 	if err := r.Scan({{range .Fields}}
 		&s.{{.Name}},{{end}}
